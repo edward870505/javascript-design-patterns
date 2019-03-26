@@ -39,6 +39,9 @@ Interface.ensureImplements = function (object) {
 }
 
 
+//ResultSet Interface.
+var ResultSet = new Interface('ResultSet',['getDate','getResults']);
+
 
 //ResultFormatter class, before we implement interface checking
 var ResultFormatter = function(resultObject){
@@ -50,7 +53,7 @@ var ResultFormatter = function(resultObject){
         }
     */
 
-
+    Interface.ensureImplements(resultObject,ResultSet);
     this.resultObject = resultObject;
 }
 
@@ -76,8 +79,9 @@ ResultFormatter.prototype.renderResults = function(){
     return resultContainer;
 };
 
-//ResultSet Interface.
-var ResultSet = new Interface('ResultSet',['getDate','getResults']);
+
+
+
 
 
 
