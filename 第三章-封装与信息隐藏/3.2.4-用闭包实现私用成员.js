@@ -1,4 +1,3 @@
-
 //Interface Constructor.
 var Interface = function (name, methods) {
     if (arguments.length != 2) {
@@ -39,26 +38,16 @@ Interface.ensureImplements = function (object) {
     }
 }
 
-var Publication = new Interface('Publication', ['getISBN', 'setISBN', 'getTitle', 'setTitle', 'getAuthor', 'setAuthor', 'display']);
+//Book类
+var Book = function (newIsbn, newTitle, newAuthor) {
 
-/**
- * 
-    var Book = function(isbn, titile, author) {
-        if (!this.checkISBN(isbn)) throw new Error("Book : Invalid ISBN");
-        this.isbn = isbn;
-        this.title = title || "No title specified";
-        this.author = author || "No author specified";
-    };
- */
+    //Private attributes 
+    //私有属性
+    var isbn, title, author;
 
-var Book = function (isbn, title, author) { //implements Publication
-    this.setISBN(isbn);
-    this.setTitle(title);
-    this.setAuthor(author);
-}
-
-Book.prototype = {
-    checkISBN: function (isbn) {
+    //Private method.
+    //私有方法
+    function checkIsbn(isbn) {
         if (isbn == undefined || typeof isbn != "string") {
             return false;
         }
@@ -102,27 +91,68 @@ Book.prototype = {
             }
         }
         return true; // All tests passed.
-    },
-    getISBN: function () {
-        return this._isbn;
-    },
-    setISBN: function (isbn) {
-        if (!(this.checkISBN(isbn))) throw new Error('Book: Invalid ISBN.');
-        this._isbn = isbn;
-    },
-    getTitle: function () {
-        return this._title;
-    },
-    setTitle: function (title) {
-        this._title = title || 'No title specified';
-    },
-    getAuthor:function(){
-        return this._author;
-    },
-    setAuthor:function(author){
-        this._author = author || 'No author specified';
-    },
-    display:function(){
-        
     }
+
+    //Privileaged methods 
+    //特权方法，可以访问私有属性的公用方法
+    this.getIsbn = function () {
+        return this.isbn;
+    };
+    this.setIsbn = function (newIsbn) {
+        //if (!checkIsbn(newIsbn)) throw new Error('Book : Invalid ISBN.');
+        isbn = newIsbn;
+    };
+    this.getTitle = function () {
+        return title;
+    };
+    this.setTitle = function (newTitle) {
+        title = newTitle || 'No title specified'
+    };
+    this.getAuthor = function () {
+        return this.author;
+    };
+    this.setAuthor = function (newAuthor) {
+        author = newAuthor || 'No author specified';
+    };
+
+    //Constructor code. 
+    //初始化操作
+    this.setIsbn(newIsbn);
+    this.setTitle(newTitle);
+    this.setAuthor(newAuthor);
+
+
+    //Public, non-privileged methods. 
+    //公用，非特权方法，只能间接访问属性
+    Book.prototype = {
+        display: function () {
+
+        }
+    }
+}
+
+
+//Novel类
+var Novel = function (newIsbn, newTitle, newAuthor,language) {
+    Novel.superclass.constructor.call(this,newIsbn,newTitle,newAuthor);
+    this.language = language || 'No language specified';
 };
+
+extend(Novel,Book);
+
+//类继承函数extend()
+function extend(subClass, superClass) {
+    var F = function () {};
+    F.prototype = superClass.prototype;
+    subClass.prototype = new F();
+    subClass.prototype.constructor = subClass;
+
+    subClass.superclass = superClass.prototype;
+    if (superClass.prototype.constructor == Object.prototype.constructor) {
+        superClass.prototype.constructor = superClass;
+    }
+}
+
+var novel = new Novel('9787559608567','黑鹤动物传奇故事:我在草原上的牧羊犬','格日勒其木格');
+console.log(novel.getIsbn());
+
