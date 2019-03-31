@@ -1,3 +1,4 @@
+
 /**EditInPlaceFiled class. */
 function EditInPlaceField(id, parent, value) {
     this.id = id;
@@ -9,7 +10,7 @@ function EditInPlaceField(id, parent, value) {
 }
 
 EditInPlaceField.prototype = {
-    createElements:function(this, id){
+    createElements:function(id){
         this.containerElement = document.createElement('div');
         this.parentElement.appendChild(this.containerElement);
 
@@ -36,6 +37,47 @@ EditInPlaceField.prototype = {
     },
     attachEvents:function(){
         var that = this;
+        addEvent(this.staticElement,'click',function(){that.convertToEditable();});
+        addEvent(this.saveBUtton,'click',function(){that.save();});
+        addEvent(this.cancelButton,'click',function(){that.cancel();});
+    },
+    convertToEditable:function(){
+        this.staticElement.style.display = 'none';
+        this.fieldElement.style.display = 'inline';
+        this.saveButton.style.display = 'inline';
+        this.cancelButton.style.display = 'inline';
+
+        this.setValue(this.value);
+    },
+    save:function(){
+        this.value = this.getValue;
+        var that = this;
+        var callback = {
+            success:function(){that.convertToText},
+            failure:function(){console.log('Error saving value.');}
+        };
+    },
+    cancel:function(){
+        this.fieldElement.style.display = 'none';
+        this.saveButton.style.display = 'none';
+        this.cancelButton.style.display = 'none';
+        this.staticElement.style.display = 'inline';
+    },
+    convertToText:function(){
+        this.fieldElement.style.display = 'none';
+        this.saveButton.style.display = 'none';
+        this.cancelButton.style.display = 'none';
+        this.staticElement.style.display = 'inline';
+        this.setValue(this.value);
+    },
+    setValue:function(value){
+        this.fieldElement.value = value;
+        this.staticElement.innerHTML = value;
+    },
+    getValue:function(){
+        return this.fieldElement.value;
     }
 };
+
+
 
