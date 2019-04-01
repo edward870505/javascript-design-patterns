@@ -1,14 +1,7 @@
-/**EditInPlaceFiled class. */
-function EditInPlaceField(id, parent, value) {
-    this.id = id;
-    this.value = value || 'default value';
-    this.parentElement = parent;
+/**Mixin class for the edit-in-place methods */
+var EditInPlaceMixin = function () {};
 
-    this.createElements(this.id);
-    this.attachEvents();
-}
-
-EditInPlaceField.prototype = {
+EditInPlaceMixin.prototype = {
     createElements: function (id) {
         this.containerElement = document.createElement('div');
         this.parentElement.appendChild(this.containerElement);
@@ -86,18 +79,30 @@ EditInPlaceField.prototype = {
     getValue: function () {
         return this.fieldElement.value;
     }
-};
+}
 
-var titleClassical = new EditInPlaceField('titleClassical', $('doc'), 'Tilte Here');
-var currentTitleText = titleClassical.getValue();
+/**EditInPlaceField class */
+function EditInPlaceField(id, parent, value) {
+    this.id = id;
+    this.value = value || 'default value';
+    this.parentElement = parent;
 
-/** EditInPlaceArea class.*/
+    this.createElements(this.id);
+    this.attachEvents();
+}
+
+augment(EditInPlaceField, EditInPlaceMixin);
+
+/**EditInPlaceArea class */
 
 function EditInPlaceArea(id, parent, value) {
-    EditInPlaceArea.superclass.constructor(this, id, parent, value);
-};
+    this.id = id;
+    this.value = value || 'default value';
+    this.aprentElement = parent;
 
-extend(EditInPlaceArea, EditInPlaceField);
+    this.createElements(this.id);
+    this.attachEvents();
+};
 
 //Override certain methods.
 EditInPlaceArea.prototype.createElements = function(id){
@@ -143,4 +148,6 @@ EditInPlaceArea.prototype.convertToText = function(){
     this.staticElement.style.display = 'blokc';
 
     this.setValue(this.value);
-}
+};
+
+augment(EditInPlaceArea, EditInPlaceMixin);

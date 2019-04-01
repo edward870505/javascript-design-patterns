@@ -1,14 +1,14 @@
-/**EditInPlaceFiled class. */
-function EditInPlaceField(id, parent, value) {
-    this.id = id;
-    this.value = value || 'default value';
-    this.parentElement = parent;
+/** EditInPlaceField Object. */
 
-    this.createElements(this.id);
-    this.attachEvents();
-}
+var EditInPlaceField = {
+    configure: function (id, parent, value) {
+        this.id = id;
+        this.value = value || 'default value';
+        this.parentElement = parent;
 
-EditInPlaceField.prototype = {
+        this.createElements(this.id);
+        this.attachEvents();
+    },
     createElements: function (id) {
         this.containerElement = document.createElement('div');
         this.parentElement.appendChild(this.containerElement);
@@ -88,19 +88,13 @@ EditInPlaceField.prototype = {
     }
 };
 
-var titleClassical = new EditInPlaceField('titleClassical', $('doc'), 'Tilte Here');
-var currentTitleText = titleClassical.getValue();
+var titlePrototypal = clone(EditInPlaceField);
+titlePrototypal.configure('titlePrototypal',$('doc'),'Title Here');
+var currentTitleText = titlePrototypal.getValue();
 
-/** EditInPlaceArea class.*/
+var EditinPlaceArea = clone(EditInPlaceField);
 
-function EditInPlaceArea(id, parent, value) {
-    EditInPlaceArea.superclass.constructor(this, id, parent, value);
-};
-
-extend(EditInPlaceArea, EditInPlaceField);
-
-//Override certain methods.
-EditInPlaceArea.prototype.createElements = function(id){
+EditInPlaceArea.createElements = function(id){
     this.containerElement = document.createElement('div');
     this.parentElement = appendChild(this.containerElement);
 
@@ -126,7 +120,7 @@ EditInPlaceArea.prototype.createElements = function(id){
 
 };
 
-EditInPlaceArea.prototype.convertToEditable = function(){
+EditInPlaceArea.convertToEditable = function(){
     this.staticElement.style.display = 'none';
     this.fieldElement.style.display = 'block';
     this.saveButton.style.display = 'inline';
@@ -136,7 +130,7 @@ EditInPlaceArea.prototype.convertToEditable = function(){
 };
 
 
-EditInPlaceArea.prototype.convertToText = function(){
+EditInPlaceArea.convertToText = function(){
     this.fieldElement.style,display = 'none';
     this.saveButton.style.display = 'none';
     this.cancelButton.style.display = 'none';
@@ -144,3 +138,5 @@ EditInPlaceArea.prototype.convertToText = function(){
 
     this.setValue(this.value);
 }
+
+
