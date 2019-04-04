@@ -165,3 +165,9 @@ function augment(receivingClass, givingClass) {
     }
   }
 }
+
+module.exports = {
+	extend,
+	augment,
+	clone
+}
